@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="calculator" id="app">
+    <div class="display">
+      <div class="previous">{{ previousText }}</div>
+      <div class="current">{{ current }}</div>
+    </div>
+
+    <div class="keys">
+      <button class="key function span-2" @click="clear">AC</button>
+      <button class="key function" @click="deleteLast">DEL</button>
+      <button class="key operator" @click="chooseOperator('/')">÷</button>
+
+      <button class="key" @click="appendNumber('7')">7</button>
+      <button class="key" @click="appendNumber('8')">8</button>
+      <button class="key" @click="appendNumber('9')">9</button>
+      <button class="key operator" @click="chooseOperator('*')">×</button>
+
+      <button class="key" @click="appendNumber('4')">4</button>
+      <button class="key" @click="appendNumber('5')">5</button>
+      <button class="key" @click="appendNumber('6')">6</button>
+      <button class="key operator" @click="chooseOperator('-')">−</button>
+
+      <button class="key" @click="appendNumber('1')">1</button>
+      <button class="key" @click="appendNumber('2')">2</button>
+      <button class="key" @click="appendNumber('3')">3</button>
+      <button class="key operator" @click="chooseOperator('+')">+</button>
+
+      <button class="key span-2" @click="appendNumber('0')">0</button>
+      <button class="key" @click="appendNumber('.')">.</button>
+      <button class="key equals" @click="equals">=</button>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
