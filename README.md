@@ -1,4 +1,4 @@
-# VUEJS3
+# VUEJS3 for Learners
 Small Scripts of VueJS3 for new learners. 
 
 Simple Calculator using VueJS 
