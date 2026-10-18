@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Bill & Tip Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <main class="receipt">
+      <h1>Bill & Tip Calculator</h1>
+      <p class="sub">Enter the bill, pick a tip, and see what everyone owes.</p>
+
+      <div class="field">
+        <label for="bill">Bill amount</label>
+        <div class="money">
+          <span>$</span>
+          <input id="bill" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" v-model.number="bill">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="label" id="tiplabel">Tip</div>
+        <div class="tips" role="group" aria-labelledby="tiplabel">
+          <button v-for="p in presets" :key="p" class="tip" type="button"
+                  :aria-pressed="custom === '' && tipPct === p" @click="pick(p)">{{ p }}%</button>
+          <input type="number" min="0" step="1" inputmode="decimal" placeholder="Custom %"
+                 aria-label="Custom tip percentage" :class="{ on: custom !== '' }"
+                 v-model.number="custom">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="label" id="peoplelabel">Number of people</div>
+        <div class="people" role="group" aria-labelledby="peoplelabel">
+          <button class="step" type="button" aria-label="Remove a person" :disabled="people <= 1" @click="people--">−</button>
+          <span class="count" aria-live="polite">{{ people }}</span>
+          <button class="step" type="button" aria-label="Add a person" @click="people++">+</button>
+        </div>
+      </div>
+
+      <label class="round"><input type="checkbox" v-model="roundUp"> Round up per person</label>
+
+      <div class="rows" aria-live="polite">
+        <div class="row"><span>Tip</span><b>{{ money(tipAmount) }}</b></div>
+        <div class="row"><span>Total with tip</span><b>{{ money(total) }}</b></div>
+        <div class="each">
+          <span>Each person pays<small v-if="roundUp && perPerson !== perPersonRaw">Rounded up from {{ money(perPersonRaw) }}</small><small v-else-if="people > 1">{{ money(tipAmount / people) }} tip each</small></span>
+          <span class="big">{{ money(perPerson) }}</span>
+        </div>
+      </div>
+
+      <button class="reset" type="button" @click="reset">Reset</button>
+    </main>
+  </div>
+
+ <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

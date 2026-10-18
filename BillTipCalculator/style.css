@@ -1,0 +1,94 @@
+:root {
+  --bg: #dfe9e5; --paper: #ffffff; --ink: #14201d; --muted: #5d6f6a;
+  --line: #c9d6d1; --accent: #0f766e; --accent-ink: #ffffff; --soft: #eef4f1;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1b18; --paper: #172824; --ink: #e8f1ee; --muted: #93a8a2;
+    --line: #2b413b; --accent: #4fd1c0; --accent-ink: #082a25; --soft: #1e332e;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1b18; --paper: #172824; --ink: #e8f1ee; --muted: #93a8a2;
+  --line: #2b413b; --accent: #4fd1c0; --accent-ink: #082a25; --soft: #1e332e;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+
+body {
+  margin: 0; min-height: 100vh; background: var(--bg); color: var(--ink);
+  font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+  display: flex; justify-content: center; padding: 28px 16px 40px;
+}
+
+/* Receipt card with a zigzag bottom edge */
+.receipt {
+  width: 100%; max-width: 400px; background: var(--paper);
+  padding: 28px 24px 48px; border-radius: 6px 6px 0 0; align-self: flex-start;
+  --tooth: 10px;
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(var(--tooth) * 2) 100%;
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(var(--tooth) * 2) 100%;
+}
+
+h1 { font-size: 1.5rem; font-weight: 800; margin: 0 0 4px; letter-spacing: -0.01em; }
+.sub { margin: 0 0 24px; color: var(--muted); font-size: .95rem; }
+
+/* Form fields */
+.field { margin-bottom: 22px; }
+label, .label { display: block; font-weight: 600; font-size: .95rem; margin-bottom: 8px; }
+
+.money { position: relative; }
+.money span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-weight: 600; }
+
+input[type=number] {
+  width: 100%; font: inherit; font-size: 1.25rem; font-weight: 600; color: var(--ink);
+  background: var(--soft); border: 2px solid transparent; border-radius: 10px; padding: 12px 14px;
+  -moz-appearance: textfield;
+}
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.money input { padding-left: 32px; }
+input:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Tip buttons */
+.tips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.tip, .step, .reset {
+  font: inherit; font-weight: 600; cursor: pointer; color: var(--ink);
+  background: var(--soft); border: 2px solid transparent; border-radius: 10px; padding: 12px 0;
+}
+.tip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.tips input { padding: 10px 8px; font-size: 1rem; text-align: center; min-width: 0; }
+.tips input.on { border-color: var(--accent); }
+
+/* People stepper */
+.people { display: flex; align-items: center; justify-content: space-between; background: var(--soft); border-radius: 10px; padding: 6px; }
+.step { width: 48px; height: 44px; font-size: 1.4rem; line-height: 1; background: var(--paper); }
+.step:disabled { opacity: .35; cursor: not-allowed; }
+.count { font-size: 1.3rem; font-weight: 800; }
+
+/* Round-up checkbox */
+.round { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; font-weight: 600; cursor: pointer; }
+.round input { width: 20px; height: 20px; accent-color: var(--accent); }
+
+/* Results */
+.rows { border-top: 2px dashed var(--line); padding-top: 18px; margin-top: 6px; }
+.row { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; color: var(--muted); }
+.row b { color: var(--ink); font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+
+.each {
+  margin-top: 14px; padding: 16px; border-radius: 12px; background: var(--accent); color: var(--accent-ink);
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.each .big { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.each small { display: block; font-weight: 400; opacity: .85; }
+
+/* Reset */
+.reset { width: 100%; margin-top: 16px; background: transparent; border-color: var(--line); }
+.reset:hover { border-color: var(--accent); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .tip, .reset, .step { transition: background .15s, border-color .15s; }
+}
