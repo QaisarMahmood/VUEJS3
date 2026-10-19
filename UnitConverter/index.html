@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Unit Converter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <main class="card">
+      <h1>Unit Converter</h1>
+
+      <div class="cats" role="group" aria-label="Category">
+        <button v-for="(c, key) in categories" :key="key" type="button" class="cat"
+                :aria-pressed="category === key" @click="category = key">{{ c.label }}</button>
+      </div>
+
+      <label class="label" for="value">Value</label>
+      <input id="value" type="text" inputmode="decimal" autocomplete="off" placeholder="Enter a number"
+             :class="{ bad: result.state === 'invalid' }" :aria-invalid="result.state === 'invalid'"
+             v-model="value">
+
+      <div class="units">
+        <div>
+          <label class="label" for="from">From</label>
+          <select id="from" v-model="from">
+            <option v-for="u in units" :key="u.id" :value="u.id">{{ u.name }} ({{ u.sym }})</option>
+          </select>
+        </div>
+        <button class="swap" type="button" aria-label="Swap units" @click="swap">⇄</button>
+        <div>
+          <label class="label" for="to">To</label>
+          <select id="to" v-model="to">
+            <option v-for="u in units" :key="u.id" :value="u.id">{{ u.name }} ({{ u.sym }})</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="out" aria-live="polite">
+        <template v-if="result.state === 'ok'">
+          <p class="eq">{{ value.trim() }} {{ fromUnit.sym }} =</p>
+          <p class="big">{{ result.text }} <span>{{ toUnit.sym }}</span></p>
+        </template>
+        <p v-else class="msg">{{ messages[result.state] }}</p>
+      </div>
+
+      <section class="history" v-if="history.length" aria-label="Recent conversions">
+        <div class="hhead">
+          <h2>Recent</h2>
+          <button class="clear" type="button" @click="clearHistory">Clear</button>
+        </div>
+        <ol>
+          <li v-for="h in history" :key="h.id">
+            <button type="button" class="hitem" @click="restore(h)">{{ h.text }}</button>
+          </li>
+        </ol>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
