@@ -12,3 +12,7 @@ Restaurant Bill & Tip Calculator using VueJS
 Units(Length, Weight, Temperature) converter using VueJS
 
 <img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/1117999f-2588-497a-8cde-3819bdb394a7" />
+
+Color Picker by VueJS
+
+<img width="200" height="600" alt="image" src="https://github.com/user-attachments/assets/bbedf861-09a7-49b1-b907-38e5078d865d" />
