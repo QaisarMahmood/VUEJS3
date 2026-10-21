@@ -16,3 +16,7 @@ Units(Length, Weight, Temperature) converter using VueJS
 Color Picker by VueJS
 
 <img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/bbedf861-09a7-49b1-b907-38e5078d865d" />
+
+Age Calculator
+
+<img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/979718d9-c4c7-449e-83c7-3dd93d9eb720" />
