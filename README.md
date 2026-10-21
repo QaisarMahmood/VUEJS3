@@ -15,4 +15,4 @@ Units(Length, Weight, Temperature) converter using VueJS
 
 Color Picker by VueJS
 
-<img width="200" height="600" alt="image" src="https://github.com/user-attachments/assets/bbedf861-09a7-49b1-b907-38e5078d865d" />
+<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/bbedf861-09a7-49b1-b907-38e5078d865d" />
