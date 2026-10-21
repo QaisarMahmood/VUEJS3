@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Color Picker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <main class="card">
+      <h1>Color Picker</h1>
+
+      <div class="preview" :style="{ backgroundColor: hex, color: textColor }" aria-label="Color preview">
+        <span class="pv-hex">{{ hex }}</span>
+      </div>
+
+      <div class="sliders">
+        <div class="slider">
+          <div class="shead"><label for="r">Red</label><output for="r">{{ r }}</output></div>
+          <input id="r" type="range" min="0" max="255" v-model.number="r" :style="trackR">
+        </div>
+        <div class="slider">
+          <div class="shead"><label for="g">Green</label><output for="g">{{ g }}</output></div>
+          <input id="g" type="range" min="0" max="255" v-model.number="g" :style="trackG">
+        </div>
+        <div class="slider">
+          <div class="shead"><label for="b">Blue</label><output for="b">{{ b }}</output></div>
+          <input id="b" type="range" min="0" max="255" v-model.number="b" :style="trackB">
+        </div>
+      </div>
+
+      <div class="codes">
+        <div class="code">
+          <span class="k">HEX</span>
+          <code>{{ hex }}</code>
+          <button type="button" class="copy" @click="copy('hex')">{{ copied === 'hex' ? 'Copied!' : 'Copy' }}</button>
+        </div>
+        <div class="code">
+          <span class="k">RGB</span>
+          <code>{{ rgb }}</code>
+          <button type="button" class="copy" @click="copy('rgb')">{{ copied === 'rgb' ? 'Copied!' : 'Copy' }}</button>
+        </div>
+      </div>
+      <p class="warn" v-if="copyFailed" role="alert">Couldn’t copy automatically. Select the code and press Ctrl+C.</p>
+
+      <div class="actions">
+        <button type="button" class="primary" @click="randomColor">Random color</button>
+        <button type="button" class="ghost" :disabled="isSaved" @click="saveColor">{{ isSaved ? 'Saved ✓' : 'Save to palette' }}</button>
+      </div>
+
+      <section class="palette" aria-label="Saved colors">
+        <h2>Palette</h2>
+        <p class="empty" v-if="!palette.length">Save colors you like and click one to load it again.</p>
+        <ul v-else>
+          <li v-for="h in palette" :key="h">
+            <button type="button" class="swatch" :class="{ current: h === hex }" :style="{ backgroundColor: h }"
+                    :aria-label="'Load ' + h" :title="h" @click="loadColor(h)"></button>
+            <button type="button" class="remove" :aria-label="'Remove ' + h" @click="removeColor(h)">×</button>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
