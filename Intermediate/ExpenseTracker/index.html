@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Expense Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <main class="page">
+      <header class="top">
+        <h1>Expense Tracker</h1>
+        <p class="sub">Record income and spending, and see where your money goes.</p>
+      </header>
+
+      <section class="summary" aria-label="Summary">
+        <div class="stat balance">
+          <span class="k">Balance</span>
+          <span class="v" :class="{ neg: balance < 0 }">{{ money(balance) }}</span>
+        </div>
+        <div class="stat">
+          <span class="k">Income</span>
+          <span class="v up">{{ money(income) }}</span>
+        </div>
+        <div class="stat">
+          <span class="k">Expenses</span>
+          <span class="v down">{{ money(expenses) }}</span>
+        </div>
+      </section>
+      <p class="scope" aria-live="polite">{{ scopeLabel }}</p>
+
+      <div class="main">
+        <transaction-form @add="addTransaction"></transaction-form>
+        <spending-chart :items="spending"></spending-chart>
+      </div>
+
+      <section class="card list-card" aria-label="Transactions">
+        <div class="list-head">
+          <h2>Transactions <span class="count">{{ listItems.length }}</span></h2>
+          <div class="filters">
+            <div class="fgroup">
+              <label for="f-cat">Category</label>
+              <select id="f-cat" v-model="categoryFilter">
+                <option value="all">All categories</option>
+                <option v-for="c in categoryOptions" :key="c" :value="c">{{ c }}</option>
+              </select>
+            </div>
+            <div class="fgroup">
+              <label for="f-month">Month</label>
+              <select id="f-month" v-model="monthFilter">
+                <option value="all">All months</option>
+                <option v-for="m in monthOptions" :key="m.value" :value="m.value">{{ m.label }}</option>
+              </select>
+            </div>
+            <button type="button" class="link" v-if="hasFilters" @click="clearFilters">Clear filters</button>
+          </div>
+        </div>
+
+        <ul class="txlist" v-if="listItems.length">
+          <transaction-item v-for="t in listItems" :key="t.id" :tx="t" @remove="removeTransaction"></transaction-item>
+        </ul>
+
+        <div class="empty" v-else-if="!transactions.length">
+          <p>No transactions yet. Add your first one above.</p>
+          <button type="button" class="ghost" @click="addSamples">Add sample data</button>
+        </div>
+        <div class="empty" v-else>
+          <p>No transactions match these filters.</p>
+          <button type="button" class="ghost" @click="clearFilters">Clear filters</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="config.js"></script>
+  <script src="components.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
