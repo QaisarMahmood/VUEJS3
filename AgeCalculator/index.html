@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Age Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <main class="card">
+      <h1>Age calculator</h1>
+      <p class="sub">Find your exact age and the days left until your next birthday.</p>
+
+      <div class="field">
+        <label for="birth">Date of birth</label>
+        <input id="birth" type="date" min="1900-01-01" :max="todayISO" v-model="birth"
+               :class="{ bad: analysis.field === 'birth' }" :aria-invalid="analysis.field === 'birth'">
+      </div>
+
+      <div class="field">
+        <div class="lrow">
+          <label for="target">Age on this date <span class="opt">(optional)</span></label>
+          <button v-if="target" type="button" class="link" @click="target = ''">Use today</button>
+        </div>
+        <input id="target" type="date" :min="birth || '1900-01-01'" v-model="target"
+               :class="{ bad: analysis.field === 'target' }" :aria-invalid="analysis.field === 'target'">
+        <p class="hint">Leave empty to calculate your age today.</p>
+      </div>
+
+      <section class="result" aria-live="polite">
+        <p class="msg error" v-if="analysis.state === 'error'">{{ analysis.message }}</p>
+        <p class="msg" v-else-if="analysis.state === 'empty'">Pick your date of birth to see your age.</p>
+
+        <template v-else>
+          <h2>{{ analysis.isToday ? 'Your age today' : 'Age on ' + formatDate(analysis.asOf) }}</h2>
+
+          <div class="tiles">
+            <div class="tile"><span class="num">{{ analysis.years }}</span><span class="unit">{{ plural(analysis.years, 'year') }}</span></div>
+            <div class="tile"><span class="num">{{ analysis.months }}</span><span class="unit">{{ plural(analysis.months, 'month') }}</span></div>
+            <div class="tile"><span class="num">{{ analysis.days }}</span><span class="unit">{{ plural(analysis.days, 'day') }}</span></div>
+          </div>
+
+          <div class="row">
+            <span>Total days lived</span>
+            <b>{{ analysis.totalDays.toLocaleString() }}</b>
+          </div>
+
+          <div class="next">
+            <template v-if="analysis.daysUntil === 0">
+              <p class="next-big">{{ analysis.isToday ? '🎂 Happy birthday!' : '🎂 That day is a birthday' }}</p>
+              <p class="next-sub">Turning {{ analysis.turning }}</p>
+            </template>
+            <template v-else>
+              <p class="next-big">{{ analysis.daysUntil.toLocaleString() }} {{ plural(analysis.daysUntil, 'day') }}</p>
+              <p class="next-sub">
+                until the next birthday{{ analysis.isToday ? '' : ' after that date' }}<br>
+                {{ formatDate(analysis.next, true) }} · turning {{ analysis.turning }}
+              </p>
+            </template>
+          </div>
+        </template>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</body>
+</html>
