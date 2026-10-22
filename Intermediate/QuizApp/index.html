@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Quiz App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <main class="card">
+
+      <!-- Start screen -->
+      <section v-if="screen === 'start'" class="start">
+        <p class="eyebrow">Vue 3 quiz</p>
+        <h1>How well do you know Vue?</h1>
+        <p class="lead">{{ total }} questions, {{ seconds }} seconds each. The order is shuffled every time.</p>
+        <button type="button" class="primary" @click="start">Start quiz</button>
+        <p class="hint">Tip: press 1 to 4 on your keyboard to answer.</p>
+      </section>
+
+      <!-- Question screen -->
+      <section v-else-if="screen === 'quiz'">
+        <div class="qhead">
+          <span>Question {{ index + 1 }} of {{ total }}</span>
+          <span class="score">Score: {{ score }}</span>
+        </div>
+
+        <div class="bar" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="100" :aria-valuenow="progressPct">
+          <div class="fill" :style="{ width: progressPct + '%' }"></div>
+        </div>
+
+        <div class="timer" :class="{ urgent, off: answered }">
+          <div class="tbar"><div class="tfill" :style="{ width: timePct + '%' }"></div></div>
+          <span class="tnum" role="timer">{{ secondsLeft }}s</span>
+        </div>
+
+        <h2 class="question" ref="qTitle" tabindex="-1">{{ current.question }}</h2>
+
+        <ul class="options">
+          <li v-for="(opt, i) in current.options" :key="i">
+            <button type="button" class="opt" :class="optionClass(i)" :aria-disabled="answered" @click="choose(i)">
+              <span class="letter">{{ letters[i] }}</span>
+              <span class="otext">{{ opt }}</span>
+              <span class="mark" aria-hidden="true">{{ markFor(i) }}</span>
+            </button>
+          </li>
+        </ul>
+
+        <div class="feedback-slot" aria-live="polite">
+          <div class="feedback" :class="feedback.kind" v-if="feedback">
+            <strong>{{ feedback.title }}</strong>
+            <span>{{ feedback.detail }}</span>
+          </div>
+        </div>
+
+        <button type="button" class="primary next" v-if="answered" ref="nextBtn" @click="next">
+          {{ isLast ? 'See results' : 'Next question' }}
+        </button>
+      </section>
+
+      <!-- Result screen -->
+      <section v-else class="result">
+        <p class="eyebrow">Quiz complete</p>
+        <div class="ring" :style="{ '--pct': percent }" role="img" :aria-label="'Score ' + score + ' out of ' + total">
+          <div class="ring-in">
+            <span class="big">{{ score }}<small>/{{ total }}</small></span>
+            <span class="pct">{{ percent }}%</span>
+          </div>
+        </div>
+        <h1>{{ verdict }}</h1>
+
+        <div class="tally">
+          <div><b class="ok">{{ score }}</b><span>Correct</span></div>
+          <div><b class="bad">{{ wrongCount }}</b><span>Wrong</span></div>
+          <div><b class="time">{{ timedOutCount }}</b><span>Timed out</span></div>
+        </div>
+
+        <div class="review" v-if="missed.length">
+          <h2>Questions to review</h2>
+          <ul>
+            <li v-for="(m, i) in missed" :key="i">
+              <span class="rq">{{ m.question }}</span>
+              <span class="ra">Answer: {{ m.answerText }}</span>
+              <span class="rc">{{ m.chosen === null ? 'You ran out of time.' : 'You chose: ' + m.chosen }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <button type="button" class="primary" @click="start">Try again</button>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.min.js"></script>
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
